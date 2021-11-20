@@ -1,0 +1,15 @@
+.drawingTools {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    background-color:darkcyan;
+}
+
+.variantSelect {
+    display: flex;
+}
+
+.colorSwatch {
+    width: 30px;
+    height: 30px;
+}

@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect } from 'react'
+import './Canvas.css'
 
 export default function Canvas() {
 
@@ -75,15 +76,24 @@ export default function Canvas() {
 
     return (
         <>  
-            <input type='color' id='colorPicker' name='colorPicker' aria-label='chooseColor' 
-                value={lineColor} onChange={changeLineColor}/>
-            <input type='range' id='widthSlider' name='widthSlider' aria-label='chooseLineWidth' 
-                min='1' max='20' value={lineWidth} onChange={changeLineWidth}/>
-            {variants && variants.map((variant, i) => (
-                <div key={i} style={{backgroundColor:`${variant.hex.value}`}} onClick={()=>setLineColor(variant.hex.value)}>{variant.hex.value}</div>
-            ))
-
-            }
+            <aside className='drawingTools'>
+                <div>
+                    <label htmlFor='colorPicker'>Selected Color</label>
+                    <input type='color' id='colorPicker' name='colorPicker' aria-label='chooseColor' 
+                        value={lineColor} onChange={changeLineColor}/>
+                </div>
+                <div className='variantSelect'>
+                    {variants && variants.map((variant, i) => (
+                        <div key={i} className='colorSwatch' style={{backgroundColor:`${variant.hex.value}`}} 
+                            onClick={()=>setLineColor(variant.hex.value)}></div>
+                    ))}
+                </div>
+                <div>
+                    <label htmlFor='widthSlider'>Brush Width</label>
+                    <input type='range' id='widthSlider' name='widthSlider' aria-label='chooseLineWidth' 
+                        min='1' max='20' value={lineWidth} onChange={changeLineWidth}/>
+                </div>
+            </aside>
             <canvas 
                 onMouseDown = {startDrawing} 
                 onMouseUp = {finishDrawing}
