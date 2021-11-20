@@ -7,6 +7,7 @@ export default function Canvas() {
     const [isDrawing, setIsDrawing] = useState(false)
     const [lineColor, setLineColor] = useState('#000000')
     const [lineWidth, setLineWidth] = useState(3)
+    const [variants, setVariants] = useState([])
 
     useEffect(()=> {
         const canvas = canvasRef.current
@@ -34,6 +35,14 @@ export default function Canvas() {
         ctx.lineWidth = lineWidth
         ctxRef.current = ctx
     }, [lineWidth])
+
+    useEffect(()=>{
+        const hex = lineColor.substring(1)
+        fetch(`https://www.thecolorapi.com/scheme?hex=${hex}&mode=monochrome&count=6`)
+        .then(res => res.json())
+        .then(data=> setVariants(data.colors))
+        .catch(err=> console.log(err))
+    }, [lineColor])
 
 
     const changeLineColor = e => {
@@ -70,6 +79,11 @@ export default function Canvas() {
                 value={lineColor} onChange={changeLineColor}/>
             <input type='range' id='widthSlider' name='widthSlider' aria-label='chooseLineWidth' 
                 min='1' max='20' value={lineWidth} onChange={changeLineWidth}/>
+            {variants && variants.map((variant, i) => (
+                <div key={i} style={{backgroundColor:`${variant.hex.value}`}} onClick={()=>setLineColor(variant.hex.value)}>{variant.hex.value}</div>
+            ))
+
+            }
             <canvas 
                 onMouseDown = {startDrawing} 
                 onMouseUp = {finishDrawing}
