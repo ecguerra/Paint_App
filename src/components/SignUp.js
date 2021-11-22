@@ -2,7 +2,7 @@ import { useState, useRef } from 'react'
 import Form from 'react-validation/build/form'
 import Input from 'react-validation/build/input'
 import { isEmail } from 'validator'
-
+import CheckButton from 'react-validation/build/button'
 import {signUp, signIn} from '../services/auth.service'
 import {resMessage} from '../utils/functions.utils'
 
@@ -57,7 +57,6 @@ const SignUp = (props) => {
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [successful, setSuccessful] = useState(false)
     const [message, setMessage] = useState('')
 
     const onChangeUsername = e => {
@@ -79,7 +78,6 @@ const SignUp = (props) => {
         e.preventDefault()
 
         setMessage('')
-        setSuccessful(false)
 
         // validates all the fields
         form.current.validateAll()
@@ -88,14 +86,12 @@ const SignUp = (props) => {
             signUp(username, email, password).then(
                 (response) => {
                     setMessage(response.data.message)
-                    setSuccessful(true)
                     signIn(username, password)
                     props.history.push('/profile')
                     window.location.reload()
                 },
                 err => {
                     setMessage(resMessage(err))
-                    setSuccessful(false)
                 }
             )
         } 
@@ -105,6 +101,8 @@ const SignUp = (props) => {
         <div>
             <div>
                 <Form onSubmit={handleSignUp} ref={form}>
+                    <label>
+                        Username
                         <Input
                             type='text'
                             name='username'
@@ -112,7 +110,9 @@ const SignUp = (props) => {
                             onChange={onChangeUsername}
                             validations={[required, vusername]}
                         />
-
+                    </label>
+                    <label>
+                        Email
                         <Input
                             type='text'
                             name='email'
@@ -120,7 +120,9 @@ const SignUp = (props) => {
                             onChange={onChangeEmail}
                             validations={[required, validEmail]}
                         />
-
+                    </label>
+                    <label>
+                    Password
                         <Input
                             type='password'
                             name='password'
@@ -128,13 +130,21 @@ const SignUp = (props) => {
                             onChange={onChangePassword}
                             validations={[required, vpassword]}
                         />
+                    </label>
+
+                        <Input 
+                            type='submit'
+                            name='submit'
+                            value='Sign Up'
+                        />
 
                     {message && (
                         <div>
                             <div role='alert'>{message}</div>
                         </div>
                     )}
-                    
+
+                    <CheckButton style={{display:'none'}} ref={checkBtn} /> 
                 </Form>
             </div>
         </div>

@@ -1,9 +1,11 @@
 import { useState, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import Form from 'react-validation/build/form'
 import Input from 'react-validation/build/input'
-
+import CheckButton from 'react-validation/build/button'
 import { signIn } from '../services/auth.service'
 import { resMessage } from '../utils/functions.utils'
+
 
 // function given to react-validator
 const required = value => {
@@ -17,6 +19,7 @@ const required = value => {
 }
 
 const SignIn = (props) => {
+    const navigate = useNavigate()
     const form = useRef()
     const checkBtn = useRef()
 
@@ -44,8 +47,7 @@ const SignIn = (props) => {
         if(checkBtn.current.context._errors.length === 0) {
             signIn(username, password).then(
                 () => {
-                    props.history.push('/profile')
-                    window.location.reload()
+                    navigate('/profile')
                 },
                 err => {
                     setMessage(resMessage(err))
@@ -55,11 +57,12 @@ const SignIn = (props) => {
 
     }
 
-    console.log(username, password)
     return (
         <div>
             <div>
                 <Form onSubmit={handleLogin} ref={form}>
+                    <label>
+                        Username
                         <Input
                             type='text'
                             name='username'
@@ -67,13 +70,22 @@ const SignIn = (props) => {
                             onChange={onChangeUsername}
                             validations={[required]}
                         />
-
+                    </label>
+                    <label>
+                        Password
                         <Input
                             type='password'
                             name='password'
                             value={password}
                             onChange={onChangePassword}
                             validations={[required]}
+                        />
+                    </label>
+
+                        <Input 
+                            type='submit'
+                            name='submit'
+                            value='Sign In'
                         />
 
                     {message && (
@@ -83,6 +95,7 @@ const SignIn = (props) => {
                             </div>
                         </div>
                     )}
+                    <CheckButton style={{display:'none'}} ref={checkBtn} />
                 </Form>
             </div>
         </div>
