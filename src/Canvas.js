@@ -93,6 +93,9 @@ export default function Canvas() {
                     <input type='range' id='widthSlider' name='widthSlider' aria-label='chooseLineWidth' 
                         min='1' max='20' value={lineWidth} onChange={changeLineWidth}/>
                 </div>
+                <div>
+                    <button onClick={()=>{setLineColor('#FFFFFF')}}>Eraser</button>
+                </div>
             </aside>
             <canvas 
                 onMouseDown = {startDrawing} 
