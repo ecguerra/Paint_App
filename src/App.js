@@ -1,8 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
-
 import Layout from './components/Layout'
-import Home from './Home'
-import Canvas from './Canvas'
+import Home from './components/Home'
+import Canvas from './components/Canvas'
 import SignIn from './components/SignIn'
 import SignUp from './components/SignUp'
 import Profile from './components/Profile'

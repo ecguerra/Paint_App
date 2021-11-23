@@ -1,14 +1,22 @@
 import { useRef, useState, useEffect } from 'react'
-import './Canvas.css'
+import Form from 'react-validation/build/form'
+import Input from 'react-validation/build/input'
+import { savePainting } from '../services/painting.service'
+import '../css/Canvas.css'
+
+const cloudName = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME
 
 export default function Canvas() {
-
+    const form = useRef()
     const canvasRef = useRef(null)
     const ctxRef = useRef(null)
     const [isDrawing, setIsDrawing] = useState(false)
     const [lineColor, setLineColor] = useState('#000000')
     const [lineWidth, setLineWidth] = useState(3)
-    const [variants, setVariants] = useState([])
+    const [variants, setVariants] = useState(null)
+
+    const [title, setTitle] = useState(null)
+    const [url, setUrl] = useState(null)
 
     useEffect(()=> {
         const canvas = canvasRef.current
@@ -74,6 +82,49 @@ export default function Canvas() {
         ctxRef.current.stroke()
     }
 
+    const onChangeTitle = e => {
+        setTitle(e.target.value)
+    }
+
+    const prepImage = async()=> {
+        const canvas = canvasRef.current
+        const imageBlob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'))
+        const formData = new FormData()
+        formData.append('image', imageBlob, 'image.png')
+
+        const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+            method: 'POST',
+            body: formData
+        })
+
+        if(res.ok) {
+            console.log('Successfully uploaded')
+        } else {
+            console.log('An error occurred while uploading')
+        }
+
+        // console.log(url)
+    }
+
+    const handleSave = e => {
+        e.preventDefault()
+        // const canvas = canvasRef.current
+        // const canvasData = canvas.toDataURL('image/png')
+        // setUrl(canvasData)
+        // console.log(url)
+
+        prepImage()
+
+        // savePainting(title, url).then((response) => 
+        // {
+        //     console.log(response)
+        // },
+        // err => {
+        //     console.log(err)
+        // })
+    }
+
+
     return (
         <>  
             <aside className='drawingTools'>
@@ -95,6 +146,21 @@ export default function Canvas() {
                 </div>
                 <div>
                     <button onClick={()=>{setLineColor('#FFFFFF')}}>Eraser</button>
+                </div>
+                <div>
+                    <Form ref={form} onSubmit={handleSave} encType="multipart/form-data">
+                        <Input 
+                            type='text'
+                            name='title'
+                            value={title}
+                            onChange={onChangeTitle}
+                        />
+                        <Input
+                            type='submit'
+                            name='submit'
+                            value='Save your Painting'
+                        />
+                    </Form>
                 </div>
             </aside>
             <canvas 

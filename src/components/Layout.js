@@ -32,9 +32,10 @@ export default function Layout(props) {
                             <Link to={'/signup'}>Sign Up</Link>
                         </div>
                     )}
+                        <Link to={'/canvas'}>New Canvas</Link>
                 </div>
             </nav>
-            
+
             {props.children}
         </div>
     )

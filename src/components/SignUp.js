@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import Form from 'react-validation/build/form'
 import Input from 'react-validation/build/input'
 import { isEmail } from 'validator'
@@ -50,7 +51,8 @@ const vpassword = value => {
     }
 }
 
-const SignUp = (props) => {
+const SignUp = () => {
+    const navigate = useNavigate()
     const form = useRef()
     const checkBtn = useRef()
 
@@ -87,7 +89,7 @@ const SignUp = (props) => {
                 (response) => {
                     setMessage(response.data.message)
                     signIn(username, password)
-                    props.history.push('/profile')
+                    navigate('/profile')
                     window.location.reload()
                 },
                 err => {

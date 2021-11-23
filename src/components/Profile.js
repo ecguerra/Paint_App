@@ -5,6 +5,8 @@ export default function Profile() {
 
     return (
         <div>
+        {currentUser && 
+        <>
             <header>
                 <h3>
                     <strong>{currentUser.username}</strong>
@@ -23,6 +25,8 @@ export default function Profile() {
             {currentUser.roles && 
                 currentUser.roles.map((role, index) => <li key={index}>{role}</li>)
             }
+        </>
+        }
         </div>
     )
 }

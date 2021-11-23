@@ -18,7 +18,6 @@ export const signIn = (username, password) => {
         password
     })
     .then(response => {
-        // check to see if the user has the accessToken
         if(response.data.accessToken) {
             setItem('user', response.data)
         }

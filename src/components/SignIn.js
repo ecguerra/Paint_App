@@ -18,7 +18,7 @@ const required = value => {
     }
 }
 
-const SignIn = (props) => {
+const SignIn = () => {
     const navigate = useNavigate()
     const form = useRef()
     const checkBtn = useRef()
@@ -48,6 +48,7 @@ const SignIn = (props) => {
             signIn(username, password).then(
                 () => {
                     navigate('/profile')
+                    window.location.reload()
                 },
                 err => {
                     setMessage(resMessage(err))
